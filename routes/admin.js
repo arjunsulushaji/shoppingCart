@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 
 //path for add-prodcut
 router.get('/add-product',function(req,res){
-  res.render('admin/add-product')
+  res.render('admin/add-product',{admin:true})
 })
 router.post('/add-product',(req,res)=>{
   console.log(req.body)
