@@ -8,8 +8,12 @@ var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
 
 var app = express();
+
 //set up after npm file upload
 var fileUpload=require('express-fileupload')
+
+//calling connet function of database
+var db=require('./config/connection')
 
 //engine setup after folder layout and partials
 var hbs = require('express-handlebars');
@@ -30,6 +34,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//calling connected db function
+db.connect((err)=>{
+  if(err)
+  console.log("Database not connecetd")
+  else
+  console.log('Database connecetd successully')
+})
 
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
