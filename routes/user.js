@@ -4,6 +4,9 @@ var router = express.Router();
 //requiring product helper file
 const productHelpers=require('../helpers/product-helpers')
 const userHelpers=require('../helpers/user-helpers')
+
+
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   //setting express session
@@ -14,8 +17,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/login',(req,res)=>{
-  res.render('user/login')
+  if(req.session.loggedIn){
+    res.redirect('/')
+  }else{
+    res.render('user/login',{"loginErr":req.session.loginErr})
+    req.session.loginErr=false
+  }
 })
+ 
+  
 
 router.get('/signup',(req,res)=>{
   res.render('user/signup')
@@ -38,6 +48,7 @@ router.post('/login',(req,res)=>{
 
       res.redirect('/')
     }else{
+      req.session.loginErr="Invalid user name or password"
       res.redirect('/login')
     }
   })
@@ -48,4 +59,15 @@ router.get('/logout',(req,res)=>{
   req.session.destroy()
   res.redirect('/')
 })
+
+//cart setup
+router.get('/cart',(req,res)=>{
+  if(req.session.loggedIn){
+    res.render('user/cart')
+  }else{
+    res.redirect('/login')
+  }
+})
+
+
 module.exports = router;

@@ -1,4 +1,5 @@
 var express = require('express');
+const { response } = require('../app');
 var router = express.Router();
 
 //requiring product helper file
@@ -30,6 +31,15 @@ router.post('/add-product',(req,res)=>{
         console.log(err)
       }
     })
+  })
+})
+
+//delete product setup
+router.get('/delete-product/:id',(req,res)=>{
+  let proId=req.params.id
+  console.log(proId);
+  productHelpers.deleteProduct(proId).then((response)=>{
+    res.redirect('/login/')
   })
 })
 module.exports = router;

@@ -2,6 +2,9 @@
     <div class="container pt-4">
         <h2 class="text-center">Login</h2>
         <form action="/login" method="post">
+        {{#if loginErr}}
+        <p class="error " style="color: red;">{{loginErr}}</p>
+        {{/if}}
             <div class="form-group">
                 <label for="">Email address</label>
                 <input type="email" class="form-control" id="" placeholder="Enter email" name="email">
