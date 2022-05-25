@@ -6,9 +6,10 @@ const productHelpers=require('../helpers/product-helpers')
 const userHelpers=require('../helpers/user-helpers')
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
+  //setting express session
+  let user=req.session.user
   productHelpers.getAllProducts().then((products)=>{
-    res.render('user/view-products',{admin:false,products})
+    res.render('user/view-products',{admin:false,products,user})
   })
 });
 
@@ -27,4 +28,24 @@ router.post('/signup',(req,res)=>{
   })
 })
 
+//login set up
+router.post('/login',(req,res)=>{
+  userHelpers.doLogin(req.body).then((response)=>{
+    if(response.status){
+      //setting express session
+      req.session.loggedIn=true
+      req.session.user=response.user
+
+      res.redirect('/')
+    }else{
+      res.redirect('/login')
+    }
+  })
+})
+
+//logout settings
+router.get('/logout',(req,res)=>{
+  req.session.destroy()
+  res.redirect('/')
+})
 module.exports = router;

@@ -15,6 +15,9 @@ var fileUpload=require('express-fileupload')
 //calling connet function of database
 var db=require('./config/connection')
 
+//setting express session
+var session=require('express-session')
+
 //engine setup after folder layout and partials
 var hbs = require('express-handlebars');
 app.set('views', path.join(__dirname, 'views'));
@@ -28,6 +31,9 @@ app.engine('hbs', hbs.engine({
 
 //set up after npm file upload
 app.use(fileUpload());
+
+//setting express session
+app.use(session({secret:'key',cookie:{maxAge:60000}}))
 
 app.use(logger('dev'));
 app.use(express.json());
