@@ -7,13 +7,11 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             //  userData.password=  salt=   await bcrypt.genSalt(10);
             userData.password = await bcrypt.hash(userData.password, 10)
-
             db.get().collection(collection.USER_COLLECTION).insertOne(userData).then((data) => {
-                resolve(data)
-                // console.log(userData.password)
-                // console.log(userData.email)                    
+            resolve(data)
+            // console.log(userData.password)
+            // console.log(userData.email)                    
             });
         })
     }
-
 }
