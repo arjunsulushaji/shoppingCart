@@ -20,9 +20,16 @@ module.exports={
             resolve(products)
         })
     },
+    getProdctDetails:(prodId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get.collection(collection.PRODUCT_COLLECTION).findOne({_id:objectId(prodId)}).then((product)=>{
+                resolve(product)
+            })
+        })
+    },
     deleteProduct:(prodId)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collection.PRODUCT_COLLECTION).removeOne({_id:objectId(prodId)}).then((response)=>{
+            db.get().collection(collection.PRODUCT_COLLECTION).remove({_id:objectId(prodId)}).then((response)=>{
                 console.log(response);
                 resolve(response)
             })

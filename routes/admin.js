@@ -1,4 +1,5 @@
 var express = require('express');
+const async = require('hbs/lib/async');
 const { response } = require('../app');
 var router = express.Router();
 
@@ -34,12 +35,21 @@ router.post('/add-product',(req,res)=>{
   })
 })
 
-//delete product setup
-router.get('/delete-product/:id',(req,res)=>{
-  let proId=req.params.id
+//delete product setup not working
+router.get('/delete-product/',(req,res)=>{
+  let proId=req.query.id
   console.log(proId);
   productHelpers.deleteProduct(proId).then((response)=>{
-    res.redirect('/login/')
+    res.redirect('/admin/')
   })
+  
 })
+
+//edit product
+router.get('/edit-product/',async(req,res)=>{
+  let prodcut=await productHelpers.getAllProducts(req.query.id)
+  console.log(prodcut)
+  res.render('admin/edit-product',{prodcut})
+})
+
 module.exports = router;
