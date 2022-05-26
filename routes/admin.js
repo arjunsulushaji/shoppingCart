@@ -35,7 +35,7 @@ router.post('/add-product',(req,res)=>{
   })
 })
 
-//delete product setup not working
+//delete product setup 
 router.get('/delete-product/',(req,res)=>{
   let proId=req.query.id
   console.log(proId);
@@ -47,9 +47,19 @@ router.get('/delete-product/',(req,res)=>{
 
 //edit product
 router.get('/edit-product/',async(req,res)=>{
-  let prodcut=await productHelpers.getAllProducts(req.query.id)
-  console.log(prodcut)
-  res.render('admin/edit-product',{prodcut})
+  let product=await productHelpers.getProdctDetails(req.query.id)
+  console.log(product)
+  res.render('admin/edit-product',{product})
+})
+router.post("/edit-product/",(req,res)=>{
+  let id=req.query.id
+  productHelpers.updateProduct(req.query.id,req.body).then(()=>{
+    res.redirect('/admin/')
+    if(req.files.Image){
+      let image=req.files.Image
+      image.mv('./public/product-images/'+id+'.jpg')
+    }
+  })
 })
 
 module.exports = router;

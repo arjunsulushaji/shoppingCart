@@ -1,8 +1,9 @@
 var db=require('../config/connection')
 var collection=require('../config/collections');
 const async = require('hbs/lib/async');
-const { reject } = require('bcrypt/promises');
+const { reject, promise } = require('bcrypt/promises');
 const { ObjectId } = require('mongodb');
+const { response } = require('../app');
 var objectId=require('mongodb').ObjectId
 
 module.exports={
@@ -22,7 +23,7 @@ module.exports={
     },
     getProdctDetails:(prodId)=>{
         return new Promise((resolve,reject)=>{
-            db.get.collection(collection.PRODUCT_COLLECTION).findOne({_id:objectId(prodId)}).then((product)=>{
+            db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:objectId(prodId)}).then((product)=>{
                 resolve(product)
             })
         })
@@ -32,6 +33,20 @@ module.exports={
             db.get().collection(collection.PRODUCT_COLLECTION).remove({_id:objectId(prodId)}).then((response)=>{
                 console.log(response);
                 resolve(response)
+            })
+        })
+    },
+    updateProduct:(prodId,proDetails)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(prodId)},{
+                $set:{
+                    Name:proDetails.Name,
+                    Description:proDetails.Description,
+                    Price:proDetails.Price,
+                    Category:proDetails.Category
+                }
+            }).then((response)=>{
+                resolve()
             })
         })
     }
