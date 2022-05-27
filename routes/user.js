@@ -1,5 +1,6 @@
 const { response } = require('express');
 var express = require('express');
+const async = require('hbs/lib/async');
 var router = express.Router();
 //requiring product helper file
 const productHelpers=require('../helpers/product-helpers')
@@ -16,7 +17,7 @@ router.get('/', function(req, res, next) {
   })
 });
 
-router.get('/login',(req,res)=>{
+router.get('/login',(req,res)=>{                                                                                
   if(req.session.loggedIn){
     res.redirect('/')
   }else{
@@ -35,6 +36,9 @@ router.get('/signup',(req,res)=>{
 router.post('/signup',(req,res)=>{
   userHelpers.doSignup(req.body).then((response)=>{
      console.log(response);
+     req.session.loggedIn=true
+     req.res.user=response
+     res.redirect('/')
   })
 })
 
@@ -61,13 +65,25 @@ router.get('/logout',(req,res)=>{
 })
 
 //cart setup
-router.get('/cart',(req,res)=>{
+router.get('/cart',async(req,res)=>{
   if(req.session.loggedIn){
+    let products=await userHelpers.getCartProducts(req.session.user._id)
+    console.log(products)
     res.render('user/cart')
   }else{
     res.redirect('/login')
   }
 })
-
+  
+//cart setup
+router.get('/add-to-cart',(req,res)=>{
+  if(req.session.loggedIn){
+    userHelpers.addToCart(req.query.id,req.session._id).then(()=>{
+      res.redirect('/')
+    })
+  }else{
+    res.redirect('/login')
+  }
+})
 
 module.exports = router;

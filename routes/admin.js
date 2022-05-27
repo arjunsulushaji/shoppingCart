@@ -51,6 +51,7 @@ router.get('/edit-product/',async(req,res)=>{
   console.log(product)
   res.render('admin/edit-product',{product})
 })
+//edit product balance
 router.post("/edit-product/",(req,res)=>{
   let id=req.query.id
   productHelpers.updateProduct(req.query.id,req.body).then(()=>{
