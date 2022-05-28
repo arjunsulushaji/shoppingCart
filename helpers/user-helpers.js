@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const { reject } = require('bcrypt/promises');
 const { response } = require('../app');
 const async = require('hbs/lib/async');
+const { use } = require('express/lib/router');
 var objectId=require('mongodb').ObjectId
 
 module.exports = {
@@ -22,7 +23,7 @@ module.exports = {
         return new Promise(async (resolve, reject)=> {
             let loginStatus = false
             let response = {}
-            let user=await db.get().collection(collection.USER_COLLECTION).findOne({ Email:userData.Email })
+            let user=await db.get().collection(collection.USER_COLLECTION).findOne({ email:userData.email })
              if (user) {
 // check if password matches    
        bcrypt.compare(userData.password,user.password).then((status)=> {
@@ -56,12 +57,13 @@ module.exports = {
     },
     addToCart:(proId,userId)=>{
         return new Promise(async(resolve,reject)=>{
-            let userCart=await db.get().collection(collection.PRODUCT_COLLECTION).findOne({user:objectId(userId)})
+            let userCart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
+            console.log(userCart)
             if(userCart){
                 db.get().collection(collection.CART_COLLECTION).updateOne({user:objectId(userId)},
-                    {
-                            $push:{products:objectId(proId)}
-                    }
+                { 
+                    $push: {products:objectId(userId)} 
+                }
                 ).then((response)=>{
                     resolve()
                 })
@@ -90,7 +92,7 @@ module.exports = {
                             {
                                 $match:{
                                     $expr:{
-                                        $in:['$_id',"$$proList"]
+                                        $in:['$_id', '$$proList']
                                     }
                                 }
                             }
