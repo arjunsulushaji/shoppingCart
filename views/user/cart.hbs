@@ -6,6 +6,7 @@
                 <tr>
                     <th scope="col">Item</th>
                     <th scope="col">Title</th>
+                    <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
                 </tr>
             </thead>
@@ -14,8 +15,9 @@
                 <tr>
                     <td><img src="/product-image/{{this._id}}.jpg"></td>
                     <td>{{this.Name}}</td>
+                    <td>{{this.Price}}</td>
                     <td>
-                        <button class="cart-item-count mr-3">-</button>1<button class="cart-item-count ml-3">+</button>
+                        <button class="cart-item-count mr-3 btn btn-info">-</button>1<button class="cart-item-count ml-3 btn btn-info">+</button>
                     </td>
                     <td>
                         <a href="" class="btn btn-danger">Remove</a>

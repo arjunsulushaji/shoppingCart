@@ -62,7 +62,7 @@ module.exports = {
             if(userCart){
                 db.get().collection(collection.CART_COLLECTION).updateOne({user:objectId(userId)},
                 { 
-                    $push: {products:objectId(userId)} 
+                    $push: {products:objectId(proId)} 
                 }
                 ).then((response)=>{
                     resolve()
@@ -101,7 +101,7 @@ module.exports = {
                     }
                 }
             ]).toArray()
-            resolve(cartItems)
+            resolve(cartItems[0].cartItems)
         })
     }
 }
