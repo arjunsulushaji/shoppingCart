@@ -90,6 +90,14 @@ router.get('/add-to-cart/:id',(req,res)=>{
     //res.redirect('/login')
   //}
 })
+
+
+//change product
+router.post('/change-product-quanity',(req,res,next)=>{
+  userHelpers.changeProductQuantity(req.body).then(()=>{
+    
+  })
+})
           
 
 module.exports = router;
