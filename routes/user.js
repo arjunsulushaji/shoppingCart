@@ -114,11 +114,13 @@ router.get('/cart/delete-cart/', (req, res) => {
 router.get('/order', async (req, res) => {
   if (req.session.loggedIn) {
     let total = await userHelpers.getTotalAmount(req.session.user._id)
-    res.render('user/order',{total})
+    res.render('user/order',{total,user:req.session.user})
   } else {
     res.redirect('/login')
   }
 })
 
-
+router.post('/order',(req,res)=>{
+  console.log(req.body)
+})
 module.exports = router;
