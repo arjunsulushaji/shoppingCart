@@ -1,7 +1,7 @@
 var db = require('../config/connection')
 var collection = require('../config/collections');
 const bcrypt = require('bcrypt');
-const { reject } = require('bcrypt/promises');
+const { reject, promise } = require('bcrypt/promises');
 const { response } = require('../app');
 const async = require('hbs/lib/async');
 const { use } = require('express/lib/router');
@@ -235,6 +235,37 @@ module.exports = {
             ]).toArray()
             console.log(total[0].total)
             resolve(total[0].total)
+        })
+    },
+    placeOrder:(order,products,total)=>{
+        return new Promise((resolve,reject)=>{
+            // console.log(order,products,total)
+            let status=order.payment==='COD'?'placed':'pending'
+            let orderObj={
+                deleveryDetails:{
+                    mobile:order.number,
+                    address:order.address,
+                    pincode:order.pincode
+                },
+                userId:objectId(order.userId),
+                paymentMethod:order.payment,
+                products:products,
+                totalAmount:total,
+                status:status,
+                date: new Date()
+            }
+
+            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
+                db.get().collection(collection.CART_COLLECTION).remove({user:objectId(order.userId)})
+                resolve()
+            })
+        })
+    },
+    getCartProductList:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let cart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
+            // console.log(cart)
+            resolve(cart.products)
         })
     }
 }
